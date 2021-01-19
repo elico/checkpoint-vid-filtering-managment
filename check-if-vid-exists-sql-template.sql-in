@@ -1,0 +1,1 @@
+SELECT * FROM appUrl WHERE url = '(^|.*\.)youtube\.com/watch\?v=###VID###' AND customApp_appUrls = ###APP_ID###;

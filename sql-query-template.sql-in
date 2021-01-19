@@ -1,0 +1,42 @@
+INSERT INTO appUrl (
+                       id,
+                       modified,
+                       url,
+                       customApp_appUrls,
+                       name
+                   )
+                   VALUES (
+                       ##OBJECT_ID##,
+                       NULL,
+                       '(^|.*\.)youtube\.com/watch\?v=##VID##',
+                       ###APP_ID###,
+                       NULL
+                   );
+INSERT INTO appUrl (
+                       id,
+                       modified,
+                       url,
+                       customApp_appUrls,
+                       name
+                   )
+                   VALUES (
+                       ##OBJECT_ID##,
+                       NULL,
+                       '(^|.*\.)ytimg\.com/watch\?v=##VID##',
+                       ###APP_ID###,
+                       NULL
+                   );
+INSERT INTO appUrl (
+                       id,
+                       modified,
+                       url,
+                       customApp_appUrls,
+                       name
+                   )
+                   VALUES (
+                       ##OBJECT_ID##,
+                       NULL,
+                       '(^|.*\.)youtu\.be/.*##VID##.*',
+                       ###APP_ID###,
+                       NULL
+                   );
