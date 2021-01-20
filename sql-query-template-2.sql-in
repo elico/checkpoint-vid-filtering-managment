@@ -8,7 +8,7 @@ INSERT INTO appUrl (
                    VALUES (
                        ##OBJECT_ID##,
                        NULL,
-                       '(^|.*\.)ytimg\.com/watch\?v=##VID##',
+                       '(^|.*\.)ytimg\.com/.*/##VID##/',
                        ###APP_ID###,
                        NULL
                    );
