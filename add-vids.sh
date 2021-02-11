@@ -15,6 +15,11 @@ if [ -f "/pfrm2.0/bin/clish" ];then
   CLISH="/pfrm2.0/bin/clish"
 fi
 
+FW_URL_FILTER_CONFIG_RELOAD="${SCRIPT_ROOT}/fake_urlf_configload"
+if [ -f "/opt/fw1/bin/urlf_configload" ];then
+  FW_URL_FILTER_CONFIG_RELOAD="/opt/fw1/bin/urlf_configload"
+fi
+
 FW_CONFIG_RELOAD="${SCRIPT_ROOT}/fake_fw_configload"
 if [ -f "/opt/fw1/bin/fw_configload" ];then
   FW_CONFIG_RELOAD="/opt/fw1/bin/fw_configload"
@@ -25,13 +30,17 @@ if [ -f "/opt/fw1/bin/cpstat" ];then
   CPSTAT="/opt/fw1/bin/cpstat"
 fi
 
-if [ ! -z "$1" ];then
+if [ -z "$1" ];then
+	echo "Missing VIDS List file name"
+	exit 1
+else
 	list_input="$1"
 fi
 
 SQL_TEMPLATE_REGEX_1=$(cat ${SCRIPT_ROOT}/sql-query-template-1.sql-in)
 SQL_TEMPLATE_REGEX_2=$(cat ${SCRIPT_ROOT}/sql-query-template-2.sql-in)
 SQL_TEMPLATE_REGEX_3=$(cat ${SCRIPT_ROOT}/sql-query-template-3.sql-in)
+SQL_TEMPLATE_REGEX_4=$(cat ${SCRIPT_ROOT}/sql-query-template-4.sql-in)
 
 
 SQL_CHECK_IF_VID_EXISTS_TEMPLATE=$(cat ${SCRIPT_ROOT}/check-if-vid-exists-sql-template.sql-in)
@@ -79,6 +88,11 @@ do
                 echo -n "${ID_COUNTER}" > counter
                 echo "${SQL_TEMPLATE_REGEX_3}" |sed -e "s@##OBJECT_ID##@${ID_COUNTER}@g" -e "s@##VID##@${line}@g" -e "s@###APP_ID###@${YT_CUSTOM_APP_ID}@g"|sqlite3 ${DB_PATH}
 
+                let "ID_COUNTER=ID_COUNTER+1"
+                echo  "${ID_COUNTER}"
+                echo -n "${ID_COUNTER}" > counter
+                echo "${SQL_TEMPLATE_REGEX_4}" |sed -e "s@##OBJECT_ID##@${ID_COUNTER}@g" -e "s@##VID##@${line}@g" -e "s@###APP_ID###@${YT_CUSTOM_APP_ID}@g"|sqlite3 ${DB_PATH}
+
 	else
 		echo "URL Pattern Already exists"
 	fi
@@ -95,6 +109,8 @@ ${CLISH} -v -f "${TMP_CLISH_FILENAME}"
 rm -vf "${TMP_CLISH_FILENAME}"
 
 echo "Applying settings"
+
+${FW_URL_FILTER_CONFIG_RELOAD} && date && ${CPSTAT} urlf -j
 
 ${FW_CONFIG_RELOAD} && date && ${CPSTAT} fw |grep -i "install"
 

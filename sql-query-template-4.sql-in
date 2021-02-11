@@ -1,0 +1,14 @@
+INSERT INTO appUrl (
+                       id,
+                       modified,
+                       url,
+                       customApp_appUrls,
+                       name
+                   )
+                   VALUES (
+                       ##OBJECT_ID##,
+                       NULL,
+                       '(^|.*\.)youtube\.com/embed/##VID##',
+                       ###APP_ID###,
+                       NULL
+                   );
